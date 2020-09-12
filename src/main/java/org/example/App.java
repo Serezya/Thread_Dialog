@@ -1,22 +1,32 @@
 package org.example;
 
+import java.util.*;
+import java.util.concurrent.*;
+
 public class App
 {
-    public static void main( String[] args ) throws InterruptedException {
+    public static void main( String[] args ) throws ExecutionException, InterruptedException {
         System.out.println("Создаю потоки...");
-        ThreadGroup group = new ThreadGroup("group-1");
+        String[] names = {"Поток 1", "Поток 2", "Поток 3", "Поток 4"};
 
-        final Thread thread1 = new MyThread(group, "Поток 1");
-        final Thread thread2 = new MyThread(group, "Поток 2");
-        final Thread thread3 = new MyThread(group, "Поток 3");
-        final Thread thread4 = new MyThread(group, "Поток 4");
+        final ExecutorService threadPool = Executors.newFixedThreadPool(names.length);
+        List<Future<String>> futures;
+        List<MyCallable> myCallable = new ArrayList<>();
 
-        thread1.start();
-        thread2.start();
-        thread3.start();
-        thread4.start();
-        Thread.sleep(15000);
-        System.out.println("Завершаю все потоки");
-        group.interrupt();
+
+        for (String name : names) {
+            myCallable.add(new MyCallable(name));
+        }
+
+        futures = threadPool.invokeAll(myCallable,15000, TimeUnit.MILLISECONDS);
+
+        for (Future<String> future : futures) {
+            if(!future.isCancelled())
+                System.out.println(future.get());
+        }
+
+        threadPool.shutdown();
+        System.out.println("Все потоки успешно завершены...");
+
     }
 }
