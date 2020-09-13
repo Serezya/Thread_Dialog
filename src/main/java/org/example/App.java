@@ -7,7 +7,7 @@ public class App
 {
     public static void main( String[] args ) throws ExecutionException, InterruptedException {
         System.out.println("Создаю потоки...");
-        String[] names = {"Поток 1", "Поток 2", "Поток 3", "Поток 4"};
+        String[] names = {"Thread-1", "Thread-2", "Thread-3", "Thread-4"};
 
         final ExecutorService threadPool = Executors.newFixedThreadPool(names.length);
         List<Future<Integer>> futures;
