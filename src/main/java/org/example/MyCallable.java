@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.concurrent.Callable;
 
-public class MyCallable implements Callable<String> {
+public class MyCallable extends Thread implements Callable<Integer> {
     private final String name;
     static int sleepTime = 3000;
     int countMessages;
@@ -13,7 +13,7 @@ public class MyCallable implements Callable<String> {
     }
 
     @Override
-    public String call() {
+    public Integer call() {
         int countIter = 100;
         String msg = null;
         try {
@@ -25,8 +25,9 @@ public class MyCallable implements Callable<String> {
         } catch (InterruptedException e) {
             msg = name + " отправил " +this.countMessages + " сообщений";
             System.out.println(msg);
+            interrupt();
+            System.out.println(name + " завершен");
         }
-        System.out.println(name + " завершен");
-        return msg;
+        return this.countMessages;
     }
 }

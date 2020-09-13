@@ -10,7 +10,7 @@ public class App
         String[] names = {"Поток 1", "Поток 2", "Поток 3", "Поток 4"};
 
         final ExecutorService threadPool = Executors.newFixedThreadPool(names.length);
-        List<Future<String>> futures;
+        List<Future<Integer>> futures;
         List<MyCallable> myCallable = new ArrayList<>();
 
 
@@ -20,7 +20,7 @@ public class App
 
         futures = threadPool.invokeAll(myCallable,15000, TimeUnit.MILLISECONDS);
 
-        for (Future<String> future : futures) {
+        for (Future<Integer> future : futures) {
             if(!future.isCancelled())
                 System.out.println(future.get());
         }
